@@ -5,13 +5,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+
 @Entity
+
+@Table(name="likes2")
 @Data
-@Table(name="likes")
 public class LikeEntity {
     @Id
     Long id;
     Long postId;
+
     Long userId;
 
 }
