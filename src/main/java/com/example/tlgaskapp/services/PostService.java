@@ -23,20 +23,14 @@ public class PostService {
         postRepository.deleteById(deleteId);
     }
 
-    public List<PostEntity> getAllPosts() {
+    public List<PostEntity> getAllPosts(Optional<Long> userId) {
+        if(userId.isPresent())
+            return postRepository.findByUserId(userId.get());
         return postRepository.findAll();
     }
 
-    public PostEntity getOneUser(Long userId) {
-        return postRepository.findById(userId).orElse(null);
-    }
-
-    public PostEntity getOnePostByID(Long postId) {
-        return postRepository.findById(postId).orElse(null);
-    }
-
     public PostEntity createOnePost(PostCreateDTO newPostDTO) {
-        UserEntity user=userService.getOneUser(newPostDTO.getUserId()); //Validation, böyle bir user var mı için
+        UserEntity user=userService.getOneUserById(newPostDTO.getUserId()); //Validation, böyle bir user var mı için
         if(user == null)
             return null;
         PostEntity toSave = new PostEntity();
@@ -58,5 +52,9 @@ public class PostService {
             return toUpdate;
         }
         return null;
+    }
+
+    public PostEntity getOnePostById(Long postId) {
+        return postRepository.findById(postId).orElse(null);
     }
 }

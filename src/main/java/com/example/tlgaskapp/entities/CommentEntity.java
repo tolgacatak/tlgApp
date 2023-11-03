@@ -8,11 +8,11 @@ import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
-@Table(name="comments2")
+@Table(name="comments")
 @Data
 public class CommentEntity {
     @Id
-    Long Id;
+    Long id;
     @ManyToOne(fetch = FetchType.LAZY) /*User Objesini Db den hemen çekme, post çekildiğinde user objesi gelmeyecek */
     @JoinColumn(name = "postId", nullable = false) /* userId ile User tablosuna bağlanıyoruz*/
     @OnDelete(action = OnDeleteAction.CASCADE) /* bir user silindiğinde postlar silinir*/
@@ -23,8 +23,6 @@ public class CommentEntity {
     @OnDelete(action = OnDeleteAction.CASCADE) /* bir user silindiğinde postlar silinir*/
     @JsonIgnore
     UserEntity user;
-    @Lob
-    @Column(columnDefinition = "text")
     String text;
 
 

@@ -23,7 +23,7 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public UserEntity getOneUser(Long userId) {
+    public UserEntity getOneUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
     }
 

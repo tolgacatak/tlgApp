@@ -5,23 +5,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-@Data
 
 @Entity
-@Table(name = "posts")
-public class PostEntity {
+@Table(name="categorys1")
+@Data
+public class CategoryEntity {
     @Id
-    Long id;
-
+    Long Id;
+    String categoryName;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "postId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    UserEntity user;
-
-    String title;
-
-    String text;
+    PostEntity post;
 
 
 }

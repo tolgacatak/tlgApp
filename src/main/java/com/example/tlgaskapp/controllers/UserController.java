@@ -25,7 +25,7 @@ public class UserController {
     }
     @GetMapping("/{userId}")
     public UserEntity getOneUser(@PathVariable Long userId){
-        return userService.getOneUser(userId);
+        return userService.getOneUserById(userId);
     }
     @PutMapping("/{userId}")
     public UserEntity updateUser(@PathVariable Long userId, @RequestBody UserEntity newUser){

@@ -7,6 +7,7 @@ import com.example.tlgaskapp.services.PostService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
@@ -18,17 +19,14 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostEntity> getAllPosts(){
-        return postService.getAllPosts();
+    public List<PostEntity> getAllPosts(@RequestParam Optional<Long> userId){
+        return postService.getAllPosts(userId);
     }
-    @GetMapping("/{userId}")
-    public PostEntity getOneUser(@PathVariable Long userId){
-        return postService.getOneUser(userId);
-    }
-    @GetMapping("/{postId}")
-    public PostEntity getOnePost(@PathVariable Long postId){
-        return postService.getOnePostByID(postId);
-    }
+   @GetMapping("/{postId}")
+   public PostEntity getOnePost(@PathVariable Long postId){
+        return postService.getOnePostById(postId);
+   }
+
     @PostMapping
     public PostEntity createOnePost(@RequestBody PostCreateDTO newPostDTO){
         return postService.createOnePost(newPostDTO);
