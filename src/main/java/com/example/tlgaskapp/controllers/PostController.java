@@ -1,5 +1,6 @@
 package com.example.tlgaskapp.controllers;
 
+import com.example.tlgaskapp.DTO.PostDTO;
 import com.example.tlgaskapp.entities.PostEntity;
 import com.example.tlgaskapp.DTO.PostCreateDTO;
 import com.example.tlgaskapp.DTO.PostUpdateDTO;
@@ -19,7 +20,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostEntity> getAllPosts(@RequestParam Optional<Long> userId){
+    public List<PostDTO> getAllPosts(@RequestParam Optional<Long> userId){
         return postService.getAllPosts(userId);
     }
    @GetMapping("/{postId}")

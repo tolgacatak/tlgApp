@@ -1,5 +1,6 @@
 package com.example.tlgaskapp.services;
 
+import com.example.tlgaskapp.DTO.PostDTO;
 import com.example.tlgaskapp.entities.PostEntity;
 import com.example.tlgaskapp.entities.UserEntity;
 import com.example.tlgaskapp.repos.PostRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -23,10 +25,12 @@ public class PostService {
         postRepository.deleteById(deleteId);
     }
 
-    public List<PostEntity> getAllPosts(Optional<Long> userId) {
+    public List<PostDTO> getAllPosts(Optional<Long> userId) {
+        List<PostEntity> listDto;
         if(userId.isPresent())
-            return postRepository.findByUserId(userId.get());
-        return postRepository.findAll();
+            listDto= postRepository.findByUserId(userId.get());
+        listDto= postRepository.findAll();
+        return listDto.stream().map(p -> new PostDTO(p)).collect(Collectors.toList()); //bir postu alıp post dto ya mapleme
     }
 
     public PostEntity createOnePost(PostCreateDTO newPostDTO) {
