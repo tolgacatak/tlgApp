@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 public class CategoryEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long Id;
     String categoryName;
     @ManyToOne(fetch = FetchType.LAZY)

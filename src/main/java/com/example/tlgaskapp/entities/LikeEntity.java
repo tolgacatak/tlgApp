@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 public class LikeEntity {
     @Id
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @ManyToOne(fetch = FetchType.LAZY) /*User Objesini Db den hemen çekme, post çekildiğinde user objesi gelmeyecek */
     @JoinColumn(name = "postId", nullable = false) /* userId ile User tablosuna bağlanıyoruz*/

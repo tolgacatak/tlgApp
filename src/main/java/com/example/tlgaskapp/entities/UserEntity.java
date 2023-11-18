@@ -1,8 +1,6 @@
 package com.example.tlgaskapp.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -10,6 +8,7 @@ import jakarta.persistence.Table;
 
 public class UserEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //id auto inc.
     Long id;
 
     String userName;
