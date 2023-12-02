@@ -5,7 +5,6 @@ import com.example.tlgaskapp.entities.LikeEntity;
 import com.example.tlgaskapp.entities.PostEntity;
 import com.example.tlgaskapp.entities.UserEntity;
 import com.example.tlgaskapp.repos.LikeRepository;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,15 +23,19 @@ public class LikeService {
     }
 
     public List<LikeEntity> getAllLikesWithParam(Optional<Long> userId, Optional<Long> postId) {
+        List<LikeEntity> list;
+
         if(userId.isPresent() && postId.isPresent()){
-            return likeRepository.findByUserIdAndPostId(userId.get(),postId.get());
+            list = likeRepository.findByUserIdAndPostId(userId.get(),postId.get());
         } else if (userId.isPresent()) {
-            return likeRepository.findByUserId(userId.get());
+            list = likeRepository.findByUserId(userId.get());
         } else if (postId.isPresent()) {
-            return likeRepository.findByPostId(postId.get());
+            list = likeRepository.findByPostId(postId.get());
         } else{
-            return likeRepository.findAll();
+            list = likeRepository.findAll();
         }
+       return list.stream().map(like -> new LikeEntity()).collect(Collectors.toList());
+
     }
 
     public void deleteOneLikeById(Long likeId) {

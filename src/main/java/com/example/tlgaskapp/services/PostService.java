@@ -1,11 +1,13 @@
 package com.example.tlgaskapp.services;
 
 import com.example.tlgaskapp.DTO.PostDTO;
+import com.example.tlgaskapp.entities.LikeEntity;
 import com.example.tlgaskapp.entities.PostEntity;
 import com.example.tlgaskapp.entities.UserEntity;
 import com.example.tlgaskapp.repos.PostRepository;
 import com.example.tlgaskapp.DTO.PostCreateDTO;
 import com.example.tlgaskapp.DTO.PostUpdateDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private PostRepository postRepository;
+    private LikeService likeService;
     private UserService userService;
     public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
         this.userService = userService;
+    }
+    @Autowired
+    public void setLikeService(LikeService likeService){
+        this.likeService = likeService;
     }
 
     public void deleteOnePostById(Long deleteId) {
@@ -30,7 +37,9 @@ public class PostService {
         if(userId.isPresent())
             listDto= postRepository.findByUserId(userId.get());
         listDto= postRepository.findAll();
-        return listDto.stream().map(p -> new PostDTO(p)).collect(Collectors.toList()); //bir postu alıp post dto ya mapleme
+        return listDto.stream().map(p -> {
+            List<LikeEntity> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getId()));
+            return new PostDTO(p, likes);}).collect(Collectors.toList()); //bir postu alıp post dto ya mapleme ve her bir post için like çekme işlemi
     }
 
     public PostEntity createOnePost(PostCreateDTO newPostDTO) {
