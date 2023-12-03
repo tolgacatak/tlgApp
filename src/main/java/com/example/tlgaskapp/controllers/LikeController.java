@@ -20,7 +20,7 @@ public class LikeController {
     public List<LikeEntity> getAllLikes(@RequestParam Optional<Long> userId, @RequestParam Optional<Long> postId){
         return likeService.getAllLikesWithParam(userId,postId);
     }
-    @DeleteMapping
+    @DeleteMapping("/{likeId}")
     public void deleteOneLike(@PathVariable Long likeId){
         likeService.deleteOneLikeById(likeId);
     }
