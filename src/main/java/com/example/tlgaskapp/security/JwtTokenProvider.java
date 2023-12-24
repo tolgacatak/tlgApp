@@ -1,9 +1,7 @@
 package com.example.tlgaskapp.security;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -13,9 +11,9 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider { //generate JWT
-    @Value("$tlgapp.app.secret")
+    @Value("${tlgapp.app.secret}")
     private String APP_SECRET; //key
-    @Value("$tlgapp.expires.in")
+    @Value("${tlgapp.expires.in}")
     private long EXPIRES_IN;   //time
 
 
@@ -31,4 +29,28 @@ public class JwtTokenProvider { //generate JWT
         return Long.parseLong(claims.getSubject()); //şifre çözüldü, userid alındı.
     }
 
+    boolean validateToken(String token) {//token doğru mu diye validate işlemi
+        try{
+            Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token); //parse edilince ,
+            return !isTokenExpired(token);
+        }catch (SignatureException e){
+            return false;
+        }catch (MalformedJwtException e){
+            return false;
+        }catch (ExpiredJwtException e){
+            return false;
+        }catch (UnsupportedJwtException e){
+            return false;
+        }catch (IllegalArgumentException e){
+            return false;
+        }
+
+
+    }
+
+    private boolean isTokenExpired(String token) {
+        Date expiration = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token).getBody().getExpiration();
+        return expiration.before(new Date());
+
+    }
 }
