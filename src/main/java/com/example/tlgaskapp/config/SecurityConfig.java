@@ -70,9 +70,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests((request) -> request
                         .requestMatchers("/auth/*")//auth ile alakalı herhangi bir request olduğunda
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/posts")
+                        .requestMatchers(HttpMethod.GET, "/posts/{id}")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/comments/{id}")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/comments")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/posts")
                         .permitAll()
                         .anyRequest().authenticated() //bunun dışındakiler auth. olmalı
                 ).sessionManagement(s-> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
