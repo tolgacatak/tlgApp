@@ -1,5 +1,6 @@
 package com.example.tlgaskapp.controllers;
 
+import com.example.tlgaskapp.DTO.AuthDTO;
 import com.example.tlgaskapp.DTO.UserRequestDTO;
 import com.example.tlgaskapp.entities.UserEntity;
 import com.example.tlgaskapp.security.JwtTokenProvider;
@@ -33,22 +34,29 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserRequestDTO loginRequest){
+    public AuthDTO login(@RequestBody UserRequestDTO loginRequest){
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(loginRequest.getUserName(),loginRequest.getPassword());
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtTokenProvider.generateJwtToken(auth); //auth objesini alır ve user detail'e göre token oluşur
-        return "Bearer " + jwtToken;
+        UserEntity userEntity = userService.getOneUserByUserName(loginRequest.getUserName());
+        AuthDTO authDTO = new AuthDTO();
+        authDTO.setMessage("Bearer " + jwtToken);
+        authDTO.setUserId(userEntity.getId());
+        return authDTO;
     }
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserRequestDTO userRequestDTO){
+    public ResponseEntity<AuthDTO> register(@RequestBody UserRequestDTO userRequestDTO){
+        AuthDTO authDTO = new AuthDTO();
         if(userService.getOneUserByUserName(userRequestDTO.getUserName()) != null){
-            return new ResponseEntity<>("Username already in use!", HttpStatus.BAD_REQUEST);
+            authDTO.setMessage("Username already in use!");
+            return new ResponseEntity<>(authDTO, HttpStatus.BAD_REQUEST);
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setUserName(userRequestDTO.getUserName());
         userEntity.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         userService.saveOneUser(userEntity);
-        return new ResponseEntity<>("User Successfully Registered...", HttpStatus.CREATED);
+        authDTO.setMessage("User Successfully Registered...");
+        return new ResponseEntity<>(authDTO, HttpStatus.CREATED);
     }
 }

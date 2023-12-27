@@ -16,7 +16,7 @@ public class LikeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @ManyToOne(fetch = FetchType.LAZY) /*User Objesini Db den hemen çekme, post çekildiğinde user objesi gelmeyecek */
-    @JoinColumn(name = "postId", nullable = false) /* userId ile User tablosuna bağlanıyoruz*/
+    @JoinColumn(name = "postId", nullable = false) /* postId ile User tablosuna bağlanıyoruz*/
     @OnDelete(action = OnDeleteAction.CASCADE) /* bir user silindiğinde postlar silinir*/
     @JsonIgnore
     PostEntity post;
